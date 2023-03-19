@@ -1,0 +1,62 @@
+quantum backend: qiskit.test.mock:FakeMontreal
+#test qasm file: test_files/1.qasm
+#test qiskit circuit: test_files.1
+#test suite: suites.TestSuite
+use benchmark_files directory: True
+test generative optimizers: true
+optimizers:
+#  - optimizers.baseline.opt
+#  - optimizers.rpo.rpo_optimizer
+#  - optimizers.feynman.feynman
+#  - optimizers.feynman1.feynman
+#  - optimizers.feynman2.feynman
+#  - optimizers.feynman2o2.feynman
+#  - optimizers.feynman2ssc.feynman
+#  - optimizers.feynman2ssct.feynman
+#  - optimizers.feynman2sst.feynman
+#  - optimizers.feynman3.feynman
+#  - optimizers.feynman3o3.feynman
+#  - optimizers.feynmano2.feynman
+#  - optimizers.feynmano3.feynman
+#  - optimizers.feynmanssc.feynman
+#  - optimizers.feynmanssct.feynman
+#  - optimizers.feynmansst.feynman
+#  - optimizers.feynmanrpo.feynman_rpo
+  - optimizers.rpopure.rpo_optimizer
+  - optimizers.qiskitlevel3.qiskit_level3
+#  - optimizers.qiskitlevel2.qiskit_level2
+#  - optimizers.l1rpol1.l1rpol1
+#  - optimizers.l2rpol2.l2rpol2
+#  - optimizers.l3rpol3.l3rpol3
+#  - optimizers.myoptimizer1.optimizer
+#  - optimizers.myoptimizer2.optimizer
+#  - optimizers.l1rpopurel1.l1rpol1
+#  - optimizers.l2rpopurel2.l2rpol2
+  - optimizers.l3rpopurel3.l3rpol3
+#  - optimizers.rpopurel1.l1rpol1
+#  - optimizers.rpopurel2.l2rpol2
+#  - optimizers.rpopurel3.l3rpol3
+#  - optimizers.l1feynmanl1.l1feynmanl1
+
+
+#  - optimizers.passes.Collect1qRuns.opt
+#  - optimizers.passes.Collect2qBlocks.opt
+#  - optimizers.passes.CollectMultiQBlocks.opt
+#  - optimizers.passes.CommutationAnalysis.opt
+#  - optimizers.passes.CommutativeCancellation.opt
+##  - optimizers.passes.ConsolidateBlocks.opt
+##  - optimizers.passes.CrosstalkAdaptiveSchedule.opt
+#  - optimizers.passes.CXCancellation.opt
+##  - optimizers.passes.EchoRZXWeylDecomposition.opt
+#  - optimizers.passes.InverseCancellation.opt
+#  - optimizers.passes.Optimize1qGates.opt
+#  - optimizers.passes.Optimize1qGatesDecomposition.opt
+##  - optimizers.passes.Optimize1qGatesSimpleCommutation.opt
+#  - optimizers.passes.RemoveDiagonalGatesBeforeMeasure.opt
+#  - optimizers.passes.RemoveResetInZeroState.opt
+
+metrics:
+  - depth
+  - gates_count
+
+clean directories: False

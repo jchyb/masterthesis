@@ -1,0 +1,58 @@
+Qiskit level 3
+* set initial layout
+* transform to match coupling constraints
+* unrolled to the basis, and any flipped cx directions are fixed
+
+Optimizations (iteratively, until not more change in depth):
+* commutative gate cancellation
+* resynthesis of two-qubit unitary blocks
+* redundant reset removal
+
+full:
+* _depth_check # In the beginning used to save the metric
+    * Depth(recurse=True)
+    * FixedPoint("depth")
+
+* _size_check # In the beginning used to save the metric
+    * Size(recurse=True)
+    * FixedPoint("size")
+
+* _opt
+    * Collect2qBlocks()
+    * ConsolidateBlocks(basis_gates=basis_gates, target=target)
+    * UnitarySynthesis(
+        basis_gates,
+        approximation_degree=approximation_degree,
+        coupling_map=coupling_map,
+        backend_props=backend_properties,
+        method=unitary_synthesis_method,
+        plugin_config=unitary_synthesis_plugin_config,
+        target=target,
+    )
+    * Optimize1qGatesDecomposition(basis=basis_gates, target=target)
+    * CommutativeCancellation()
+
+* _unroll_if_out_of_basis
+    * GatesInBasis(basis_gates, target=target),
+    * ConditionalController(unroll, condition=_unroll_condition), # unroll condition = all gates in basis
+
+* _depth_check 
+    * Depth(recurse=True)
+    * FixedPoint("depth")
+
+* _size_check
+    * Size(recurse=True)
+    * FixedPoint("size")
+
+* _directon 
+    * passes from "common.generate_pre_op_passmanager(target, coupling_map).passes()" # check to ensure that directionality from the coupling
+    map is respected ()https://github.com/Qiskit/qiskit-terra/blob/27da80d03f112b6225c80038e37169577bb8acd2/qiskit/transpiler/preset_passmanagers/common.py#L304
+    # For transpiling to a target we need to run GateDirection in the
+    # optimization loop to correct for incorrect directions that might be
+    # inserted by UnitarySynthesis which is direction aware but only via
+    # the coupling map which with a target doesn't give a full picture
+
+
+https://github.com/Qiskit/qiskit-terra/blob/27da80d03f112b6225c80038e37169577bb8acd2/qiskit/transpiler/passmanager.py#L343
+
+

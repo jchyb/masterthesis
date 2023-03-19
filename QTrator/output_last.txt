@@ -1,0 +1,346 @@
+Skipping: 1
+Skipping: adder_8
+Skipping: adder_n4
+Skipping: basis_change_n3
+Skipping: basis_test_n4
+Skipping: basis_trotter_n4
+Skipping: bell_n4
+Skipping: bv_n14
+Skipping: bv_n19
+Skipping: cat_state_n22
+Skipping: cat_state_n4
+Skipping: csla_mux_3
+Skipping: deutsch_n2
+Skipping: dnn_n16
+Skipping: dnn_n2
+Skipping: dnn_n8
+Skipping: error_correctiond3_n5
+Skipping: fredkin_n3
+Skipping: gf2^4_mult
+Skipping: gf2^5_mult
+Skipping: gf2^6_mult
+Skipping: gf2^7_mult
+Skipping: gf2^8_mult
+Skipping: ghz_state_n23
+Skipping: grover
+Skipping: grover_5
+Skipping: grover_n2
+Skipping: ham15-low
+Skipping: ham15-med
+Skipping: hs4_n4
+Skipping: hwb6
+Skipping: ising_n10
+Skipping: ising_n26
+Skipping: iswap_n2
+Skipping: linearsolver_n3
+Skipping: lpn_n5
+Skipping: mod5_4
+Skipping: mod_mult_55
+Skipping: mod_red_21
+Skipping: multiplier_n15
+Skipping: multiplier_n25
+Skipping: multiply_n13
+Skipping: qaoa_n3
+Skipping: qaoa_n6
+Skipping: qcla_com_7
+Skipping: qcla_mod_7
+Skipping: qec_en_n5
+Skipping: qft
+Skipping: qft16
+Skipping: qft2
+Skipping: qft4
+Skipping: qft8
+Skipping: qft_4
+Skipping: qft_n15
+Skipping: qft_n20
+Skipping: qft_n4
+Skipping: qpe_n9
+Skipping: qrng_n4
+Skipping: quantumwalks_n2
+Skipping: rc_adder_6
+Skipping: sat_n11
+Skipping: simon_n6
+Skipping: tof_10
+Skipping: tof_3
+Skipping: tof_4
+2022-05-12 01:14:49.655057 - tof_5 - Baseline
+2022-05-12 01:14:49.818072 - Statevector noise
+2022-05-12 01:15:12.803415 - Statevector ideal
+2022-05-12 01:15:54.531914 - tof_5 - MyOptimizer1
+2022-05-12 01:15:54.665524 - Statevector noise
+2022-05-12 01:16:20.005228 - Statevector ideal
+$$$$$$$$$$$$
+
+Fidelity ideal ideal - 1.000000284697076
+Fidelity ideal noise - 0.9969812912785846
+Fidelity noise noise - 0.993483043979164
+
+$$$$$$$$$$$$
+2022-05-12 01:16:36.858750 - tof_5 - MyOptimizer2
+2022-05-12 01:16:37.006097 - Statevector noise
+2022-05-12 01:17:04.109881 - Statevector ideal
+$$$$$$$$$$$$
+
+Fidelity ideal ideal - 1.0000005049672003
+Fidelity ideal noise - 1.3423021811973038e-05
+Fidelity noise noise - 1.335689908148246e-05
+
+$$$$$$$$$$$$
+2022-05-12 01:17:29.055947 - tof_5 - QiskitLevel2
+2022-05-12 01:17:29.194112 - Statevector noise
+2022-05-12 01:18:02.786904 - Statevector ideal
+$$$$$$$$$$$$
+
+Fidelity ideal ideal - 1.000000239077643
+Fidelity ideal noise - 0.6443724162958797
+Fidelity noise noise - 0.6411981933664131
+
+$$$$$$$$$$$$
+2022-05-12 01:18:27.742096 - tof_5 - QiskitLevel3
+2022-05-12 01:18:27.869512 - Statevector noise
+2022-05-12 01:18:43.862522 - Statevector ideal
+$$$$$$$$$$$$
+
+Fidelity ideal ideal - 1.000000239077643
+Fidelity ideal noise - 0.9992809499250074
+Fidelity noise noise - 0.9943584231004349
+
+$$$$$$$$$$$$
+2022-05-12 01:19:00.701370 - tof_5 - RPOLevel3Hoare
+2022-05-12 01:19:00.801900 - Statevector noise
+2022-05-12 01:19:10.634793 - Statevector ideal
+$$$$$$$$$$$$
+
+Fidelity ideal ideal - 1.000000366125933
+Fidelity ideal noise - 0.008103837843821956
+Fidelity noise noise - 0.008269599795648
+
+$$$$$$$$$$$$
+2022-05-12 01:19:28.083280 - tof_5 - RPOLevel3Pure
+2022-05-12 01:19:28.156857 - Statevector noise
+2022-05-12 01:19:30.342791 - Statevector ideal
+$$$$$$$$$$$$
+
+Fidelity ideal ideal - 1.0000003189559454
+Fidelity ideal noise - 1.0000003189559454
+Fidelity noise noise - 0.995074248469951
+
+$$$$$$$$$$$$
+2022-05-12 01:19:43.361420 - tof_5 - l1rpol1
+2022-05-12 01:19:43.464129 - Statevector noise
+2022-05-12 01:19:52.734210 - Statevector ideal
+$$$$$$$$$$$$
+
+Fidelity ideal ideal - 1.0000004547913448
+Fidelity ideal noise - 0.9993958587975947
+Fidelity noise noise - 0.9946638473964021
+
+$$$$$$$$$$$$
+2022-05-12 01:20:10.347104 - tof_5 - l2rpol2
+2022-05-12 01:20:10.448534 - Statevector noise
+2022-05-12 01:20:21.796785 - Statevector ideal
+$$$$$$$$$$$$
+
+Fidelity ideal ideal - 1.000000414586197
+Fidelity ideal noise - 0.04035033747373663
+Fidelity noise noise - 0.04015156893060576
+
+$$$$$$$$$$$$
+2022-05-12 01:20:39.956492 - tof_5 - l3rpol3
+2022-05-12 01:20:40.062478 - Statevector noise
+2022-05-12 01:20:54.617569 - Statevector ideal
+$$$$$$$$$$$$
+
+Fidelity ideal ideal - 0.8535535787838486
+Fidelity ideal noise - 0.009580494723426898
+Fidelity noise noise - 0.009533300546181466
+
+$$$$$$$$$$$$
+2022-05-12 01:21:11.156466 - variational_n4 - Baseline
+2022-05-12 01:21:11.246075 - Statevector noise
+2022-05-12 01:21:14.757458 - Statevector ideal
+2022-05-12 01:21:48.552400 - variational_n4 - MyOptimizer1
+2022-05-12 01:21:48.635164 - Statevector noise
+2022-05-12 01:21:52.102095 - Statevector ideal
+$$$$$$$$$$$$
+
+Fidelity ideal ideal - 2.794082432927801e-49
+Fidelity ideal noise - 1.1068591322277213e-38
+Fidelity noise noise - 1.8755174909529615e-12
+
+$$$$$$$$$$$$
+2022-05-12 01:22:01.174758 - variational_n4 - MyOptimizer2
+2022-05-12 01:22:01.255704 - Statevector noise
+2022-05-12 01:22:05.201803 - Statevector ideal
+$$$$$$$$$$$$
+
+Fidelity ideal ideal - 2.794082432927801e-49
+Fidelity ideal noise - 2.0026119377312585e-38
+Fidelity noise noise - 3.393325860036764e-12
+
+$$$$$$$$$$$$
+2022-05-12 01:22:18.321191 - variational_n4 - QiskitLevel2
+2022-05-12 01:22:18.405368 - Statevector noise
+2022-05-12 01:22:21.885665 - Statevector ideal
+$$$$$$$$$$$$
+
+Fidelity ideal ideal - 2.794082432927801e-49
+Fidelity ideal noise - 1.0525772083652911e-38
+Fidelity noise noise - 1.7835394833797094e-12
+
+$$$$$$$$$$$$
+2022-05-12 01:22:36.550093 - variational_n4 - QiskitLevel3
+2022-05-12 01:22:36.631421 - Statevector noise
+2022-05-12 01:22:39.957272 - Statevector ideal
+$$$$$$$$$$$$
+
+Fidelity ideal ideal - 1.0517296973525397e-68
+Fidelity ideal noise - 7.870638955781747e-43
+Fidelity noise noise - 1.333640442287776e-16
+
+$$$$$$$$$$$$
+2022-05-12 01:22:52.802126 - variational_n4 - RPOLevel3Hoare
+2022-05-12 01:22:52.882680 - Statevector noise
+2022-05-12 01:22:56.366392 - Statevector ideal
+$$$$$$$$$$$$
+
+Fidelity ideal ideal - 3.438777609287245e-49
+Fidelity ideal noise - 1.041032608527658e-44
+Fidelity noise noise - 1.7639777358265628e-18
+
+$$$$$$$$$$$$
+2022-05-12 01:23:08.701382 - variational_n4 - RPOLevel3Pure
+2022-05-12 01:23:08.781275 - Statevector noise
+2022-05-12 01:23:12.289586 - Statevector ideal
+$$$$$$$$$$$$
+
+Fidelity ideal ideal - 7.924330085850907e-48
+Fidelity ideal noise - 7.199287801989485e-45
+Fidelity noise noise - 1.2198833439851826e-18
+
+$$$$$$$$$$$$
+2022-05-12 01:23:28.020628 - variational_n4 - l1rpol1
+2022-05-12 01:23:28.103363 - Statevector noise
+2022-05-12 01:23:31.639605 - Statevector ideal
+$$$$$$$$$$$$
+
+Fidelity ideal ideal - 3.3987314704682454e-49
+Fidelity ideal noise - 6.835381194515132e-43
+Fidelity noise noise - 1.1582211877171888e-16
+
+$$$$$$$$$$$$
+2022-05-12 01:23:44.067459 - variational_n4 - l2rpol2
+2022-05-12 01:23:44.149031 - Statevector noise
+2022-05-12 01:23:47.643319 - Statevector ideal
+$$$$$$$$$$$$
+
+Fidelity ideal ideal - 3.1327419842322727e-49
+Fidelity ideal noise - 1.4450179330829673e-43
+Fidelity noise noise - 2.44851068155638e-17
+
+$$$$$$$$$$$$
+2022-05-12 01:24:00.944899 - variational_n4 - l3rpol3
+2022-05-12 01:24:01.027916 - Statevector noise
+2022-05-12 01:24:04.294542 - Statevector ideal
+$$$$$$$$$$$$
+
+Fidelity ideal ideal - 0.2537947019619307
+Fidelity ideal noise - 0.25374994721285843
+Fidelity noise noise - 0.25210547074426165
+
+$$$$$$$$$$$$
+2022-05-12 01:24:18.036798 - vbe_adder_3 - Baseline
+2022-05-12 01:24:18.301651 - Statevector noise
+2022-05-12 01:25:14.729642 - Statevector ideal
+2022-05-12 01:26:01.872598 - vbe_adder_3 - MyOptimizer1
+2022-05-12 01:26:02.028480 - Statevector noise
+2022-05-12 01:26:44.853751 - Statevector ideal
+$$$$$$$$$$$$
+
+Fidelity ideal ideal - 1.0000001844239992
+Fidelity ideal noise - 0.9943187696923368
+Fidelity noise noise - 2.5756258939386605e-30
+
+$$$$$$$$$$$$
+2022-05-12 01:27:04.257220 - vbe_adder_3 - MyOptimizer2
+2022-05-12 01:27:04.410091 - Statevector noise
+2022-05-12 01:27:41.769288 - Statevector ideal
+$$$$$$$$$$$$
+
+Fidelity ideal ideal - 1.0000001001302798
+Fidelity ideal noise - 0.00035791790454818925
+Fidelity noise noise - 1.712092507574696e-11
+
+$$$$$$$$$$$$
+2022-05-12 01:28:03.737128 - vbe_adder_3 - QiskitLevel2
+2022-05-12 01:28:03.965123 - Statevector noise
+2022-05-12 01:28:30.551281 - Statevector ideal
+$$$$$$$$$$$$
+
+Fidelity ideal ideal - 1.0000000158365716
+Fidelity ideal noise - 0.9933328620895765
+Fidelity noise noise - 2.590876452393334e-30
+
+$$$$$$$$$$$$
+2022-05-12 01:28:55.866562 - vbe_adder_3 - QiskitLevel3
+2022-05-12 01:28:56.011074 - Statevector noise
+2022-05-12 01:29:24.025469 - Statevector ideal
+$$$$$$$$$$$$
+
+Fidelity ideal ideal - 1.0000002687177239
+Fidelity ideal noise - 0.00011318933738194869
+Fidelity noise noise - 2.888233406386194e-34
+
+$$$$$$$$$$$$
+2022-05-12 01:29:40.664790 - vbe_adder_3 - RPOLevel3Hoare
+2022-05-12 01:29:40.766813 - Statevector noise
+2022-05-12 01:29:54.271419 - Statevector ideal
+$$$$$$$$$$$$
+
+Fidelity ideal ideal - 1.0000003189164113
+Fidelity ideal noise - 0.9977235106520751
+Fidelity noise noise - 2.561751229692515e-30
+
+$$$$$$$$$$$$
+2022-05-12 01:30:10.679292 - vbe_adder_3 - RPOLevel3Pure
+2022-05-12 01:30:10.751576 - Statevector noise
+2022-05-12 01:30:12.985081 - Statevector ideal
+$$$$$$$$$$$$
+
+Fidelity ideal ideal - 1.0000003029462687
+Fidelity ideal noise - 1.0000003029462687
+Fidelity noise noise - 2.5515918405455663e-30
+
+$$$$$$$$$$$$
+2022-05-12 01:30:26.917745 - vbe_adder_3 - l1rpol1
+2022-05-12 01:30:27.025623 - Statevector noise
+2022-05-12 01:30:53.913993 - Statevector ideal
+$$$$$$$$$$$$
+
+Fidelity ideal ideal - 0.8535536711990261
+Fidelity ideal noise - 0.8469258349633495
+Fidelity noise noise - 2.161008395370293e-30
+
+$$$$$$$$$$$$
+2022-05-12 01:31:12.408132 - vbe_adder_3 - l2rpol2
+2022-05-12 01:31:12.535542 - Statevector noise
+2022-05-12 01:31:26.421614 - Statevector ideal
+$$$$$$$$$$$$
+
+Fidelity ideal ideal - 0.8535535651187364
+Fidelity ideal noise - 0.8514685904920904
+Fidelity noise noise - 2.1725996497994945e-30
+
+$$$$$$$$$$$$
+2022-05-12 01:31:44.089816 - vbe_adder_3 - l3rpol3
+2022-05-12 01:31:44.214727 - Statevector noise
+2022-05-12 01:31:53.514675 - Statevector ideal
+$$$$$$$$$$$$
+
+Fidelity ideal ideal - 0.6218595118100194
+Fidelity ideal noise - 0.6309758685239073
+Fidelity noise noise - 1.6099979152189006e-30
+
+$$$$$$$$$$$$
+
+Process finished with exit code 0

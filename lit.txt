@@ -1,0 +1,32 @@
+--Code models-- 
+- Evaluating large language models trained on code - https://arxiv.org/abs/2107.03374
+
+Proponuje model bazujący na GPT nazwany Codex, który jest bazą do github copilot(bazowo docstringi do kodu, Czyli NLP -> PL)
+
+- CodeT5: Identifier-aware Unified Pre-trained Encoder-Decoder Models for Code Understanding and Generation - https://arxiv.org/abs/2109.00859
+2 Sep 2021
+
+Obiecuje lepsze działanie od modeli bazujących bezpośrednio na NLP przez szersze branie pod uwagę semantyki kodu np. może brać pod uwagę typy tokenu. Wykorzystywany może być do wszelkiego rodzaju detekcji (np. fault detection), co lepiej się wpisuje do naszego problemu.
+
+- Bridging pre-trained models and downstream tasks for source code understanding - https://dl.acm.org/doi/abs/10.1145/3510003.3510062?casa_token=1WK1w0k1vMoAAAAA:70QwckiptD5f4ZqMmQVn2OXp0PxbWLR_7eNigDV360rbffWHeY0g0NS0vo11Pq6-g0FHj5hFc5t_gg
+Prezentuje sposób na finetuning parametrów do pretrenowanych modeli typu CodeBERT, by zachować jego semantyczne znaczenie i ulepszyć wyniki
+ * data augumentation via semantically unchanging transforms
+   * należałoby przygotować transformacje kodu QASM
+ * CL (Curriculum learning) - sorted training from easy to hard examples
+
+
+--Optymalizacja klasycznego kodu (nie rozwiązują takiego samego problemu co my, ale o optymalizacji kodu)--
+- Towards Compile-Time-Reducing Compiler Optimization Selection via Machine Learning - https://dl.acm.org/doi/abs/10.1145/3458744.3473355?casa_token=_f5SRyNYR8gAAAAA:TcriAf8_KHGL43N_njNrhHmKU3FR0-nrRtbgiiGTPW7T1gVqz37AYnvjURZZqtz6DDCALai4mwuslA
+August 2021
+ML, który dla programu wybiera których passów optymalizacji nie wykonywać (dla przyspieszenia).
+
+- MiCOMP: Mitigating the Compiler Phase-Ordering Problem Using Optimization Sub-Sequences and Machine Learning - https://dl.acm.org/doi/abs/10.1145/3124452
+
+- ML-based Clang optimization passes selection for binary code size reduction -https://ieeexplore.ieee.org/abstract/document/9394114
+
+(tego typu prac powinno być więcej)
+
+https://arxiv.org/pdf/quant-ph/0307111.pdf
+
+
+

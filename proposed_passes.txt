@@ -1,0 +1,21 @@
+{
+    Collect2qBlocks()
+    ConsolidateBlocks(basis_gates=basis_gates, target=target)
+    UnitarySynthesis(
+        basis_gates,
+        approximation_degree=approximation_degree,
+        coupling_map=coupling_map,
+        backend_props=backend_properties,
+        method=unitary_synthesis_method,
+        plugin_config=unitary_synthesis_plugin_config,
+        target=target,
+    )
+} // Collect blocks of subsequent code on two qubits, change them to unitary blocks, and change them back
+
+{ Optimize1qGatesDecomposition(basis_gates) } // Combining of multiple single cubit gates into one
+
+{ CommutativeCancellation } // cancellation of inverse gates
+
+{ HoareOptimizer() } //
+
+{ ConstantsStateOptimization } // constant folding

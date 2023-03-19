@@ -1,0 +1,9 @@
+numpy
+qiskit
+PyYAML
+pandas
+matplotlib
+z3-solver
+//optional
+//qiskit-aer-gpu
+pylatexenc
