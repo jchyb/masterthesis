@@ -10,7 +10,12 @@
 # copyright notice, and modified files need to carry a notice indicating
 # that they have been altered from the originals.
 
-# Modified by Jan Chyb
+"""Pass manager for optimization level 3, providing heavy optimization.
+
+Level 3 pass manager: heavy optimization by noise adaptive qubit mapping and
+gate cancellation using commutativity rules and unitary synthesis.
+"""
+
 
 from qiskit.transpiler.passmanager_config import PassManagerConfig
 from qiskit.transpiler.timing_constraints import TimingConstraints
@@ -35,22 +40,39 @@ from qiskit.transpiler.passes import Collect2qBlocks
 from qiskit.transpiler.passes import ConsolidateBlocks
 from qiskit.transpiler.passes import UnitarySynthesis
 from qiskit.transpiler.passes import GatesInBasis
+from qiskit.transpiler.passes import BarrierBeforeFinalMeasurements
 from qiskit.transpiler.runningpassmanager import ConditionalController
 from qiskit.transpiler.preset_passmanagers import common
 from qiskit.transpiler.passes.layout.vf2_layout import VF2LayoutStopReason
 from qiskit.transpiler.preset_passmanagers.plugin import (
     PassManagerStagePluginManager,
-    list_stage_plugins,
 )
-from qiskit.transpiler import TranspilerError
-from qiskit.utils.optionals import HAS_TOQM
 
-# from optimizers.rpo.passmanager.hoare_opt import HoareOptimizer
-from optimizers.feynmanrpo.purestate.constant_state_optimization import ConstantsStateOptimization
+from optimizers.rpo.purestate.constant_state_optimization import ConstantsStateOptimization
 
 
 def custom_pass_manager(pass_manager_config: PassManagerConfig, opt_code: str) -> StagedPassManager:
-    """Based on Quiskit level3_pass_manager (TODO)
+    """Level 3 pass manager: heavy optimization by noise adaptive qubit mapping and
+    gate cancellation using commutativity rules and unitary synthesis.
+
+    This pass manager applies the user-given initial layout. If none is given, a search
+    for a perfect layout (i.e. one that satisfies all 2-qubit interactions) is conducted.
+    If no such layout is found, and device calibration information is available, the
+    circuit is mapped to the qubits with best readouts and to CX gates with highest fidelity.
+
+    The pass manager then transforms the circuit to match the coupling constraints.
+    It is then unrolled to the basis, and any flipped cx directions are fixed.
+    Finally, optimizations in the form of commutative gate cancellation, resynthesis
+    of two-qubit unitary blocks, and redundant reset removal are performed.
+
+    Args:
+        pass_manager_config: configuration of the pass manager.
+
+    Returns:
+        a level 3 pass manager.
+
+    Raises:
+        TranspilerError: if the passmanager config is invalid.
     """
     plugin_manager = PassManagerStagePluginManager()
     basis_gates = pass_manager_config.basis_gates
@@ -61,17 +83,17 @@ def custom_pass_manager(pass_manager_config: PassManagerConfig, opt_code: str) -
     layout_method = pass_manager_config.layout_method or "sabre"
     routing_method = pass_manager_config.routing_method or "sabre"
     translation_method = pass_manager_config.translation_method or "translator"
-    optimization_methodunitary_synthesis_method = pass_manager_config.unitary_synthesis_method
-    timing_constraints = pass_manager_config.timing_constraints or TimingConstraints()
-    unitary_synthesis_plugin_config = pass_manager_config.unitary_synthesis_plugin_config
-    target = pass_manager_config.target
-    hls_config = pass_manager_config.hls_config = pass_manager_config.optimization_method
+    optimization_method = pass_manager_config.optimization_method
     scheduling_method = pass_manager_config.scheduling_method
     instruction_durations = pass_manager_config.instruction_durations
     seed_transpiler = pass_manager_config.seed_transpiler
     backend_properties = pass_manager_config.backend_properties
     approximation_degree = pass_manager_config.approximation_degree
-    
+    unitary_synthesis_method = pass_manager_config.unitary_synthesis_method
+    timing_constraints = pass_manager_config.timing_constraints or TimingConstraints()
+    unitary_synthesis_plugin_config = pass_manager_config.unitary_synthesis_plugin_config
+    target = pass_manager_config.target
+    hls_config = pass_manager_config.hls_config
 
     # Layout on good qubits if calibration info available, otherwise on dense links
     _given_layout = SetLayout(initial_layout)
@@ -101,7 +123,7 @@ def custom_pass_manager(pass_manager_config: PassManagerConfig, opt_code: str) -
         else VF2Layout(
             coupling_map,
             seed=seed_transpiler,
-            call_limit=int(3e7),  # Set call limit to ~60 sec with retworkx 0.10.2
+            call_limit=int(3e7),  # Set call limit to ~60 sec with rustworkx 0.10.2
             properties=backend_properties,
             target=target,
         )
@@ -115,50 +137,19 @@ def custom_pass_manager(pass_manager_config: PassManagerConfig, opt_code: str) -
         _choose_layout_1 = NoiseAdaptiveLayout(backend_properties)
     elif layout_method == "sabre":
         _choose_layout_1 = SabreLayout(
-            coupling_map, max_iterations=4, seed=seed_transpiler, swap_trials=20
-        )
-
-    toqm_pass = False
-    # TODO: Remove when qiskit-toqm has it's own plugin and we can rely on just the plugin interface
-    if routing_method == "toqm" and "toqm" not in list_stage_plugins("routing"):
-        HAS_TOQM.require_now("TOQM-based routing")
-        # pylint: disable=import-error
-        from qiskit_toqm import (
-            ToqmSwap,
-            ToqmStrategyO3,
-            latencies_from_target,
-        )
-
-        if initial_layout:
-            raise TranspilerError("Initial layouts are not supported with TOQM-based routing.")
-
-        toqm_pass = True
-        # Note: BarrierBeforeFinalMeasurements is skipped intentionally since ToqmSwap
-        #       does not yet support barriers.
-        routing_pass = ToqmSwap(
             coupling_map,
-            strategy=ToqmStrategyO3(
-                latencies_from_target(
-                    coupling_map, instruction_durations, basis_gates, backend_properties, target
-                )
-            ),
+            max_iterations=4,
+            seed=seed_transpiler,
+            swap_trials=20,
+            layout_trials=20,
+            skip_routing=pass_manager_config.routing_method is not None
+            and routing_method != "sabre",
         )
-        vf2_call_limit = common.get_vf2_call_limit(
-            3, pass_manager_config.layout_method, pass_manager_config.initial_layout
-        )
-        routing_pm = common.generate_routing_passmanager(
-            routing_pass,
-            target,
-            coupling_map=coupling_map,
-            vf2_call_limit=vf2_call_limit,
-            backend_properties=backend_properties,
-            seed_transpiler=seed_transpiler,
-            use_barrier_before_measurement=not toqm_pass,
-        )
-    else:
-        routing_pm = plugin_manager.get_passmanager_stage(
-            "routing", routing_method, pass_manager_config, optimization_level=3
-        )
+
+    # Choose routing pass
+    routing_pm = plugin_manager.get_passmanager_stage(
+        "routing", routing_method, pass_manager_config, optimization_level=3
+    )
 
     # 8. Optimize iteratively until no more change in depth. Removes useless gates
     # after reset and before measure, commutes gates and optimizes contiguous blocks.
@@ -168,40 +159,37 @@ def custom_pass_manager(pass_manager_config: PassManagerConfig, opt_code: str) -
     def _opt_control(property_set):
         return (not property_set["depth_fixed_point"]) or (not property_set["size_fixed_point"])
 
-    # pass_blocks = [
-    #     [
-    #         Collect2qBlocks(),
-    #         ConsolidateBlocks(basis_gates=basis_gates, target=target),
-    #         UnitarySynthesis(
-    #             basis_gates,
-    #             approximation_degree=approximation_degree,
-    #             coupling_map=coupling_map,
-    #             backend_props=backend_properties,
-    #             method=unitary_synthesis_method,
-    #             plugin_config=unitary_synthesis_plugin_config,
-    #             target=target,
-    #         )
-    #     ],
-    #     [Optimize1qGatesDecomposition(basis_gates)],
-    #     [CommutativeCancellation()],
-    #     [HoareOptimizer()],
-    #     [ConstantsStateOptimization()]
+    # previous optimization passes
+    # _opt = [
+    #     Collect2qBlocks(),
+    #     ConsolidateBlocks(basis_gates=basis_gates, target=target),
+    #     UnitarySynthesis(
+    #         basis_gates,
+    #         approximation_degree=approximation_degree,
+    #         coupling_map=coupling_map,
+    #         backend_props=backend_properties,
+    #         method=unitary_synthesis_method,
+    #         plugin_config=unitary_synthesis_plugin_config,
+    #         target=target,
+    #     ),
+    #     Optimize1qGatesDecomposition(basis=basis_gates, target=target),
+    #     CommutativeCancellation(),
     # ]
 
     _opt = []
-    # for i in  opt_code:
 
+    # "custom" optimization passes
     if opt_code[0] == '1':
         _opt.extend([
             Collect2qBlocks(),
             ConsolidateBlocks(basis_gates=basis_gates, target=target),
             UnitarySynthesis(
                 basis_gates,
-                approximation_degree=approximation_degree,
-                coupling_map=coupling_map,
-                backend_props=backend_properties,
-                method=unitary_synthesis_method,
-                plugin_config=unitary_synthesis_plugin_config,
+                # approximation_degree=approximation_degree,
+                # coupling_map=coupling_map,
+                # backend_props=backend_properties,
+                # method=unitary_synthesis_method,
+                # plugin_config=unitary_synthesis_plugin_config,
                 target=target,
             )
         ])
@@ -222,21 +210,6 @@ def custom_pass_manager(pass_manager_config: PassManagerConfig, opt_code: str) -
         _opt.extend(
             [ConstantsStateOptimization()]
         )
-    # _opt = [
-    #     Collect2qBlocks(),
-    #     ConsolidateBlocks(basis_gates=basis_gates, target=target),
-    #     UnitarySynthesis(
-    #         basis_gates,
-    #         approximation_degree=approximation_degree,
-    #         coupling_map=coupling_map,
-    #         backend_props=backend_properties,
-    #         method=unitary_synthesis_method,
-    #         plugin_config=unitary_synthesis_plugin_config,
-    #         target=target,
-    #     ),
-    #     Optimize1qGatesDecomposition(basis_gates),
-    #     CommutativeCancellation(),
-    # ]
 
     # Build pass manager
     init = common.generate_error_on_control_flow(
@@ -264,11 +237,20 @@ def custom_pass_manager(pass_manager_config: PassManagerConfig, opt_code: str) -
                 "layout", layout_method, pass_manager_config, optimization_level=3
             )
         else:
+
+            def _swap_mapped(property_set):
+                return property_set["final_layout"] is None
+
             layout = PassManager()
             layout.append(_given_layout)
             layout.append(_choose_layout_0, condition=_choose_layout_condition)
-            layout.append(_choose_layout_1, condition=_vf2_match_not_found)
-            layout += common.generate_embed_passmanager(coupling_map)
+            layout.append(
+                [BarrierBeforeFinalMeasurements(), _choose_layout_1], condition=_vf2_match_not_found
+            )
+            embed = common.generate_embed_passmanager(coupling_map)
+            layout.append(
+                [pass_ for x in embed.passes() for pass_ in x["passes"]], condition=_swap_mapped
+            )
         routing = routing_pm
     else:
         layout = None
@@ -289,9 +271,7 @@ def custom_pass_manager(pass_manager_config: PassManagerConfig, opt_code: str) -
             unitary_synthesis_plugin_config,
             hls_config,
         )
-    pre_routing = None
-    if toqm_pass:
-        pre_routing = translation
+
     if optimization_method is None:
         optimization = PassManager()
         unroll = [pass_ for x in translation.passes() for pass_ in x["passes"]]
@@ -359,7 +339,6 @@ def custom_pass_manager(pass_manager_config: PassManagerConfig, opt_code: str) -
     return StagedPassManager(
         init=init,
         layout=layout,
-        pre_routing=pre_routing,
         routing=routing,
         translation=translation,
         pre_optimization=pre_optimization,

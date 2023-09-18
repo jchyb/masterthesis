@@ -13,24 +13,24 @@ class RPOLevel3HoareOptimizer:
         self.qasm_file = qasm_file
         self.quantum_backend = quantum_backend
         self.pm1 = level_3_pass_manager(self.pm_config_q(self.quantum_backend))
-        self.pm2 = level_3_hoare_pass_manager(self.pm_config(0, self.quantum_backend))
+        self.pm2 = level_3_hoare_pass_manager(self.pm_config(self.quantum_backend))
         self.pm3 = level_3_pass_manager(self.pm_config_q(self.quantum_backend))
 
         # print(qasm_file)
         self.circuit = get_circuit_from_qasm_file(qasm_file)
         self.optimizer_name = 'l3rpol3'
 
-    def pm_config(self, seed, backend):
+    def pm_config(self, backend):
         return PassManagerConfig(
             initial_layout=None,
             basis_gates=['u1', 'u2', 'u3', 'cx', 'id', 'u'],
             coupling_map=CouplingMap(backend.configuration().coupling_map),
-            backend_properties=backend.properties(),
-            seed_transpiler=seed)
+            backend_properties=backend.properties())
 
     def pm_config_q(self, backend):
         return PassManagerConfig(
-            basis_gates=backend.configuration().basis_gates,
+            initial_layout=None,
+            basis_gates=['u1', 'u2', 'u3', 'cx', 'id', 'u'],
             coupling_map=CouplingMap(backend.configuration().coupling_map),
             backend_properties=backend.properties())
 
@@ -49,3 +49,6 @@ class RPOLevel3HoareOptimizer:
 
 def get_optimizer(qasm_file, quantum_backend):
     return RPOLevel3HoareOptimizer(qasm_file, quantum_backend)
+
+def get_name():
+    return 'l3rpol3'

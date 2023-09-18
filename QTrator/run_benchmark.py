@@ -6,10 +6,7 @@ from importlib import import_module
 import os
 import glob
 
-from calculate_averages import calculate_averages
 from custom_optimizers.custom_optimizer import custom_optimizer
-from draw_charts1 import draw_charts
-from evaluate_errors1 import evaluate_errors
 from qasm_file_preparer import prepare_qasm_file, create_qasm_from_qiskit_circuit, create_qasms_from_suite
 from evaluate_result import evaluate_results
 import time
@@ -36,13 +33,24 @@ def task(data):
     log(file + " " + opt)
     for tries in range(5):
         try:
+            ########## faster
             optimizer_name = module.get_name()
-            new_file = "result_files/" + optimizer_name + "_" + file
+            new_file = "result_files/" + optimizer_name + "_" + file.replace("\\", "__")
             if os.path.isfile(new_file):
                 log("skipping " + new_file)
                 break
             log(optimizer_name)
-            optimizer = module.get_optimizer("benchmark_files/" + file, backend)
+            #########
+            optimizer = module.get_optimizer(file, backend)
+            #######
+            # optimizer_name = optimizer.optimizer_name
+            # new_file = "result_files/" + optimizer_name + "_" + file.replace("\\", "__")
+            # if os.path.isfile(new_file):
+            #     log("skipping " + new_file)
+            #     break
+            # log(optimizer_name)
+            ######
+
             start = time.time()
             optimizer.optimize_with_save(new_file)
             took = time.time() - start
@@ -61,11 +69,11 @@ def task_generative(data):
     for tries in range(5):
         try:
             optimizer_name = opt
-            new_file = "result_files/" + optimizer_name + "_" + file 
+            new_file = "result_files/" + optimizer_name + "_" + file.replace("\\", "__") 
             if os.path.isfile(new_file):
                 log("skipping " + new_file)
                 break
-            optimizer = custom_optimizer(opt, "benchmark_files/" + file, backend)
+            optimizer = custom_optimizer(opt, file, backend)
             start = time.time()
             optimizer.optimize_with_save(new_file)
             took = time.time() - start
@@ -109,11 +117,12 @@ if __name__ == '__main__':
     #     os.remove(f)
     ######
 
-    benchmark_files_list = os.listdir("benchmark_files/")
+    benchmark_files_list = [filename for filename in glob.iglob('benchmark_files\\**\\*.qasm', recursive=True)]
     benchmark_files_list.sort()
+    print(benchmark_files_list)
     modules = {}
 
-    pool = multiprocessing.Pool(3)
+    pool = multiprocessing.Pool(4)
 
     if configuration['test generative optimizers']:
         optimizers = []
@@ -124,39 +133,12 @@ if __name__ == '__main__':
         arg_list = []
         for file_nr, file in enumerate(benchmark_files_list):
             if file.endswith(".qasm"):
-                # log(f'File {file} - {file_nr + 1}/{len(benchmark_files_list)}')
                 for opt in optimizers:
-                    # log(opt)
                     arg_list.append((opt, file, file_nr, be_module, be_func))
-                        # for tries in range(10):
-                        # try:
-                        #     optimizer_name = opt
-                        #     new_file = "result_files/" + optimizer_name + "_" + file
-                            
-                        #     if os.path.isfile(new_file):
-                        #         log("skipping " + new_file)
-                        #         if optimizer_name in times:
-                        #             times[optimizer_name][file] = -1
-                        #         else:
-                        #             times[optimizer_name] = {}
-                        #             times[optimizer_name][file] = -1
-                        #         break
-                        #     optimizer = custom_optimizer(opt, "benchmark_files/" + file, backend)
-                        #     start = time.time()
-                        #     optimizer.optimize_with_save(new_file)
-                        #     took = time.time() - start
-                        #     log(f"Time for {opt} {file} - {took}")
-                        #     # if optimizer.optimizer_name in times:
-                        #     #     times[optimizer.optimizer_name][file] = took
-                        #     # else:
-                        #     #     times[optimizer.optimizer_name] = {}
-                        #     #     times[optimizer.optimizer_name][file] = took
-                        #     # break
-                        # except Exception as e:
-                        #     log(f"Try {tries} failed")
-                        #     log(e)
+
+        # for arg in arg_list:
+        #     task_generative(arg)
         pool.map(task_generative, arg_list)
-        # for i in arg_list: task_generative(i)
     else:
         optimizers = configuration['optimizers']
 
@@ -166,38 +148,11 @@ if __name__ == '__main__':
         arg_list = []
         for file_nr, file in enumerate(benchmark_files_list):
             if file.endswith(".qasm"):
-                # log(f'File {file} - {file_nr + 1}/{len(benchmark_files_list)}')
                 for opt in optimizers:
                     arg_list.append((opt, file, file_nr, be_module, be_func))
-                    # task((opt, file, file_nr, be_module, be_func))
-                    # for tries in range(5):
-                    #     try:
-                    #         optimizer_name = modules[opt].get_name()
-                    #         new_file = "result_files/" + optimizer_name + "_" + file
-                            
-                            # if os.path.isfile(new_file) or file_nr < 7000:
-                            #     log("skipping " + new_file)
-                            #     if optimizer_name in times:
-                            #         times[optimizer_name][file] = -1
-                            #     else:
-                            #         times[optimizer_name] = {}
-                            #         times[optimizer_name][file] = -1
-                            #     break
-                            # log(optimizer_name)
-                            # optimizer = modules[opt].get_optimizer("benchmark_files/" + file, backend)
-                            # start = time.time()
-                            # optimizer.optimize_with_save(new_file)
-                            # took = time.time() - start
-                            # log(f"Time for {opt} {file} - {took}")
-                            # if optimizer.optimizer_name in times:
-                            #     times[optimizer.optimizer_name][file] = took
-                            # else:
-                            #     times[optimizer.optimizer_name] = {}
-                            #     times[optimizer.optimizer_name][file] = took
-                            # break
-                        # except Exception as e:
-                        #     log(f"Try {tries} failed")
-                        #     log(e)
+                   
+        # for arg in arg_list:
+        #     task(arg)
         pool.map(task, arg_list)
     pool.close()
 

@@ -9,19 +9,19 @@ class RPOLevel3PureOptimizer:
     def __init__(self, qasm_file, quantum_backend):
         self.qasm_file = qasm_file
         self.quantum_backend = quantum_backend
-        self.pm = level_3_with_contant_pure(self.pm_config(0, self.quantum_backend))
+        self.pm = level_3_with_contant_pure(self.pm_config(self.quantum_backend))
         #print(qasm_file)
         self.circuit = get_circuit_from_qasm_file(qasm_file)
         self.optimizer_name = 'RPOLevel3Pure'
 
 
-    def pm_config(self, seed, backend):
+    def pm_config(self, backend):
+        # print(backend.configuration().basis_gates)
         return PassManagerConfig(
             initial_layout=None,
             basis_gates=['u1', 'u2', 'u3', 'cx', 'id', 'u'],
             coupling_map=CouplingMap(backend.configuration().coupling_map),
-            backend_properties=backend.properties(),
-            seed_transpiler=seed)
+            backend_properties=backend.properties())
 
     def optimize_with_save(self, output_file):
         transpiled = self.pm.run(self.circuit)

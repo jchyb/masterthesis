@@ -10,14 +10,14 @@ class QiskitLevel2Optimizer:
         self.qasm_file = qasm_file
         self.quantum_backend = quantum_backend
         self.pm = level_2_pass_manager(self.pm_config(quantum_backend))
-        #print(qasm_file)
         self.circuit = get_circuit_from_qasm_file(qasm_file)
         self.optimizer_name = 'QiskitLevel2'
 
 
     def pm_config(self, backend):
         return PassManagerConfig(
-            basis_gates=backend.configuration().basis_gates,
+            initial_layout=None,
+            basis_gates=['u1', 'u2', 'u3', 'cx', 'id', 'u'],
             coupling_map=CouplingMap(backend.configuration().coupling_map),
             backend_properties=backend.properties())
 

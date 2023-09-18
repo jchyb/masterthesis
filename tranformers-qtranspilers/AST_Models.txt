@@ -1,5 +1,0 @@
-Convolutional Neural Networks over Tree Structures
-for Programming Language Processing
-https://www.aaai.org/ocs/index.php/AAAI/AAAI16/paper/viewPaper/11775
-2016-02-21
-

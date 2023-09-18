@@ -1,5 +1,8 @@
 {
     "python.analysis.extraPaths": [
         "./QTrator"
-    ]
+    ],
+    "files.watcherExclude": {
+        "**/target": true
+    }
 }

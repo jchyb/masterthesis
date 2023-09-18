@@ -13,7 +13,7 @@ class BaselineOptimizer:
 
     def optimize_with_save(self, output_file):
         circuit = get_circuit_from_qasm_file(self.qasm_file)
-        circuit = transpile(circuit, backend=self.quantum_backend, optimization_level=0)
+        circuit = transpile(circuit, basis_gates=['u1', 'u2', 'u3', 'cx', 'id', 'u'], backend=self.quantum_backend, optimization_level=0)
         circuit.qasm(filename=output_file)
 
 
